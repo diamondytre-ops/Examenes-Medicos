@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Datos - MediSys</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-hospital-user"></i>
+                <h3 style="margin: 0; color: var(--text-color);">MediSys</h3>
+            </div>
+            <ul class="nav-links">
+                <li><a href="inicio.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li id="linkDr"><a href="pagDr.html"><i class="fas fa-user-md"></i> Panel Doctor</a></li>
+                <li><a href="historial.html" class="active"><i class="fas fa-database"></i> Base de Datos</a></li>
+                <li id="linkEnf"><a href="pagEnf.html"><i class="fas fa-user-nurse"></i> Panel Enfermería</a></li>
+                <li><a href="agendar.html"><i class="fas fa-calendar-alt"></i> Agendar Citas</a></li>
+                <li style="margin-top: auto;"><a href="#" onclick="logout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt" style="color: var(--danger);"></i> Cerrar Sesión</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <div>
+                    <h1>Base de Datos Integral</h1>
+                    <p style="color: #666;">Base de Datos Local Segura (IndexedDB)</p>
+                </div>
+                <div class="user-info">
+                    <span id="welcomeMessage">Doctor</span>
+                    <i class="fas fa-user-circle" style="font-size: 2rem;"></i>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statPacientes">0</span>
+                        <span class="stat-label">Total Pacientes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-notes-medical"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statHistoriales">0</span>
+                        <span class="stat-label">Historiales</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-file-pdf"></i>
+                    <div class="stat-info">
+                        <span class="stat-value" id="statPdfs">0</span>
+                        <span class="stat-label">PDFs Generados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar / Filters -->
+            <div class="toolbar">
+                <input type="text" id="searchNombre" class="form-control" placeholder="Buscar por Nombre del Paciente...">
+                <input type="date" id="filterFecha" class="form-control">
+                <select id="filterTipo" class="form-control">
+                    <option value="">Todos los Formatos</option>
+                    <option value="Examen Médico">Examen Médico</option>
+                    <option value="Historia Clínica de Ingreso">Historia Clínica de Ingreso</option>
+                    <option value="Audiometría">Audiometría</option>
+                </select>
+                <div id="adminButtons" style="flex-grow: 1; display: flex; gap: 10px; justify-content: flex-end;">
+                    <button class="btn btn-primary btn-sm" onclick="exportarCSVTodos()"><i class="fas fa-file-csv"></i> Exportar a CSV</button>
+                    <button class="btn btn-danger btn-sm" onclick="limpiarBaseDatos()"><i class="fas fa-trash-alt"></i> Limpiar DB</button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="card table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Paciente</th>
+                            <th>Edad</th>
+                            <th>Tipo de Registro</th>
+                            <th>Diagnóstico</th>
+                            <th style="text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaHistorial">
+                        <!-- Llenado por JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+    <script src="historial.js"></script>
+</body>
+</html>

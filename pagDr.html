@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Doctor - Sistema Médico</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF para exportar a PDF sin instalación -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-hospital-user"></i>
+                <h3 style="margin: 0; color: var(--text-color);">MediSys</h3>
+            </div>
+            <ul class="nav-links">
+                <li><a href="inicio.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li id="linkDr"><a href="pagDr.html" class="active"><i class="fas fa-user-md"></i> Panel Doctor</a></li>
+                <li><a href="historial.html"><i class="fas fa-database"></i> Base de Datos</a></li>
+                <li id="linkEnf"><a href="pagEnf.html"><i class="fas fa-user-nurse"></i> Panel Enfermería</a></li>
+                <li><a href="agendar.html"><i class="fas fa-calendar-alt"></i> Agendar Citas</a></li>
+                <li style="margin-top: auto;"><a href="#" onclick="logout()" style="color: var(--danger);"><i
+                            class="fas fa-sign-out-alt" style="color: var(--danger);"></i> Cerrar Sesión</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <div>
+                    <h1>Panel de Médico</h1>
+                    <p style="color: #666;">Gestión de Expedientes Clínicos</p>
+                </div>
+            </div>
+
+            <!-- Botones de Acción (Grandes) -->
+            <div class="dashboard-grid" style="margin-bottom: 2rem;">
+                <a href="examen_medico.html" class="dash-card" style="text-decoration: none;">
+                    <i class="fas fa-file-medical"></i>
+                    <h3>Examen Médico</h3>
+                </a>
+                <a href="agendar.html" class="dash-card" style="text-decoration: none;">
+                    <i class="fas fa-calendar-plus"></i>
+                    <h3>Agendar Cita</h3>
+                </a>
+                <a href="audiometria.html" class="dash-card" style="text-decoration: none; background: linear-gradient(135deg, #e31837, #b01028); color: white;">
+                    <i class="fas fa-ear-listen" style="color: white;"></i>
+                    <h3 style="color: white;">Audiometría</h3>
+                </a>
+                <a href="historia_ingreso_clinico.html" class="dash-card" style="text-decoration: none;">
+                    <i class="fas fa-clipboard-user"></i>
+                    <h3>Historia Ingreso</h3>
+                </a>
+                <a href="historial.html" class="dash-card" style="text-decoration: none; background: linear-gradient(135deg, #1a3a5c, #0056b3); color: white;">
+                    <i class="fas fa-database" style="color: white;"></i>
+                    <h3 style="color: white;">Historial Integral</h3>
+                    <p style="color: rgba(255,255,255,0.8); font-size: 0.85rem; margin:0;">Base de Datos</p>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="db.js"></script>
+    <script src="pdf.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
