@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const usuario = document.getElementById('usuario').value.trim().toLowerCase();
             const pass = document.getElementById('password').value;
 
-            if (usuario === 'doctor' && pass === '123') {
+            if (usuario === 'Manjarrez' && pass === 'Doctora2026') {
                 localStorage.setItem('currentUser', 'Doctor');
                 localStorage.setItem('userRole', 'doctor');
                 window.location.href = 'inicio.html';
-            } else if (usuario === 'enfermera' && pass === '123') {
+            } else if (usuario === 'enfermera' && pass === '12345') {
                 localStorage.setItem('currentUser', 'Enfermera');
                 localStorage.setItem('userRole', 'enfermera');
                 window.location.href = 'inicio.html';
