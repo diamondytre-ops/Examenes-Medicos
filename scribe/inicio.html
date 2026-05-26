@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Sistema Médico</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-hospital-user"></i>
+                <h3 style="margin: 0; color: var(--text-color);">MediSys</h3>
+            </div>
+            <ul class="nav-links">
+                <li><a href="inicio.html" class="active"><i class="fas fa-home"></i> Inicio</a></li>
+                <li id="linkDr"><a href="pagDr.html"><i class="fas fa-user-md"></i> Panel Doctor</a></li>
+                <li id="linkReceta"><a href="receta.html"><i class="fas fa-prescription-bottle-medical"></i> Receta Médica</a></li>
+                <li id="linkRol"><a href="rol-programacion.html"><i class="fas fa-calendar-week"></i> Rol Programación</a></li>
+                <li><a href="historial.html"><i class="fas fa-database"></i> Base de Datos</a></li>
+                <li id="linkEnf"><a href="pagEnf.html"><i class="fas fa-user-nurse"></i> Panel Enfermería</a></li>
+                <li><a href="agendar.html"><i class="fas fa-calendar-alt"></i> Agendar Citas</a></li>
+                <li style="margin-top: auto;"><a href="#" onclick="logout()" style="color: var(--danger);"><i
+                            class="fas fa-sign-out-alt" style="color: var(--danger);"></i> Cerrar Sesión</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <div>
+                    <h1 id="welcomeMessage">Bienvenido</h1>
+                    <p style="color: #666;">Sistema de Expedientes Médicos Digitales</p>
+                </div>
+                <div class="user-info">
+                    <i class="fas fa-user-circle" style="font-size: 2.5rem;"></i>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <a href="agendar.html" class="dash-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Programados</h3>
+                    <p style="color: #666;">Ver citas del día</p>
+                </a>
+
+                <a href="agendar.html" class="dash-card">
+                    <i class="fas fa-calendar-plus"></i>
+                    <h3>Agendar Cita</h3>
+                    <p style="color: #666;">Crear nueva cita</p>
+                </a>
+
+
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

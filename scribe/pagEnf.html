@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Enfermería - Sistema Médico</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF para exportar a PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-hospital-user"></i>
+                <h3 style="margin: 0; color: var(--text-color);">MediSys</h3>
+            </div>
+            <ul class="nav-links">
+                <li><a href="inicio.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li id="linkDr"><a href="pagDr.html"><i class="fas fa-user-md"></i> Panel Doctor</a></li>
+                <li id="linkReceta"><a href="receta.html"><i class="fas fa-prescription-bottle-medical"></i> Receta Médica</a></li>
+                <li id="linkRol"><a href="rol-programacion.html"><i class="fas fa-calendar-week"></i> Rol Programación</a></li>
+                <li><a href="historial.html"><i class="fas fa-database"></i> Base de Datos</a></li>
+                <li id="linkEnf"><a href="pagEnf.html" class="active"><i class="fas fa-user-nurse"></i> Panel Enfermería</a></li>
+                <li><a href="agendar.html"><i class="fas fa-calendar-alt"></i> Agendar Citas</a></li>
+                <li style="margin-top: auto;"><a href="#" onclick="logout()" style="color: var(--danger);"><i
+                            class="fas fa-sign-out-alt" style="color: var(--danger);"></i> Cerrar Sesión</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <div>
+                    <h1>Panel de Enfermería</h1>
+                    <p style="color: #666;">Control y Registro de Signos Vitales</p>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="dashboard-grid" style="margin-bottom: 2rem;">
+                <div class="dash-card" onclick="toggleSection('secNuevoSigno')">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>Tomar Signos</h3>
+                </div>
+                <div class="dash-card" onclick="toggleSection('secListaSignos')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>Registros Diarios</h3>
+                </div>
+                <div class="dash-card" onclick="toggleSection('secListaCitasEnf')">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Citas del Día</h3>
+                </div>
+            </div>
+
+            <!-- Sección: Registrar Signos -->
+            <div id="secNuevoSigno" class="card dynamic-section">
+                <h2><i class="fas fa-stethoscope"></i> Registro de Signos Vitales</h2>
+                <form id="formEnf">
+                    <div class="form-group">
+                        <label>Nombre del Paciente</label>
+                        <input type="text" id="nombreEnf" class="form-control" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label>Presión Arterial</label>
+                            <input type="text" id="presionEnf" class="form-control" placeholder="Ej. 120/80" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Temperatura (°C)</label>
+                            <input type="number" step="0.1" id="tempEnf" class="form-control" placeholder="Ej. 36.5"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label>Peso (kg)</label>
+                            <input type="number" step="0.1" id="pesoEnf" class="form-control" placeholder="Ej. 70.5"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Observaciones Generales</label>
+                        <textarea id="obsEnf" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i class="fas fa-save"></i> Guardar Registro
+                    </button>
+                </form>
+            </div>
+
+            <!-- Sección: Lista de Registros -->
+            <div id="secListaSignos" class="card dynamic-section hidden">
+                <h2><i class="fas fa-list-alt"></i> Pacientes Registrados Hoy</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Paciente</th>
+                                <th>Presión</th>
+                                <th>Temp</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaSignos">
+                            <!-- Se llena con JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sección: Lista de Citas (Vista Enfermería) -->
+            <div id="secListaCitasEnf" class="card dynamic-section hidden">
+                <h2><i class="fas fa-calendar-check"></i> Estado de Citas Programadas</h2>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Paciente</th>
+                                <th>Motivo</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCitasEnf">
+                            <!-- Se llena con JS, reutilizaremos la lógica de renderCitas -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="db.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
