@@ -8,10 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const usuario = document.getElementById('usuario').value.trim();
-            const pass = document.getElementById('password').value;
+            const usuario = document.getElementById('usuario').value.trim().toLowerCase();
+            const pass = document.getElementById('password').value.trim().toLowerCase();
 
-            if (usuario === 'Manjarrez' && pass === 'Doctora2026') {
+            if (usuario === 'manjarrez' && pass === 'doctora2026') {
                 localStorage.setItem('currentUser', 'Doctor');
                 localStorage.setItem('userRole', 'doctor');
                 window.location.href = 'inicio.html';
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('userRole', 'enfermera');
                 window.location.href = 'inicio.html';
             } else {
-                alert('Credenciales incorrectas. (Pista: doctor/123 o enfermera/123)');
+                alert('Credenciales incorrectas. Verifica tu usuario y contraseña.');
             }
         });
     }
