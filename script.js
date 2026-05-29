@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const usuario = document.getElementById('usuario').value.trim().toLowerCase();
+            const usuario = document.getElementById('usuario').value.trim();
             const pass = document.getElementById('password').value;
 
             if (usuario === 'Manjarrez' && pass === 'Doctora2026') {
