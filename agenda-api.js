@@ -13,7 +13,7 @@
  */
 
 // ─── CONFIGURACIÓN DE LA API (Enlace de tu Web App de Google) ─────────────────
-const API_URL = 'https://script.google.com/macros/s/AKfycbwiQyPn1cUzNZQhSorKUBN1-v-_nKrVbFKrvzGBH45gPe02-ycMAoH58VWn4AOITk18/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyax_wujgoNd-fBNmCouQJyhTgHoKLAk7hm17RG6dRWnq2oQxCm64Nnt1or2TIHcjik/exec';
 
 // ─── Utilidades de notificación ───────────────────────────────────────────────
 
