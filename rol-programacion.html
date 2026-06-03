@@ -215,60 +215,62 @@
     <script src="db.js"></script>
     <script src="pdf.js"></script>
     <script src="script.js"></script>
+    <!-- API Backend -->
+    <script src="api-config.js"></script>
+    <script src="agenda-api.js"></script>
 
     <!-- Lógica de Negocio de la Agenda -->
     <script>
         const HOURS = ['9:00', '10:00', '11:00', '12:00', '13:00', '15:00', '16:00'];
         const DAYS = [1, 2, 3, 4, 5]; // Lun, Mar, Mie, Jue, Vie
         
-        // Base de Datos local en memoria respaldada por LocalStorage
-        let agendaData = {}; 
-        let currentWeekStart = '2026-04-20'; // Semana por defecto de lunes
+        // Base de datos en memoria (fuente: backend Google Sheets)
+        let agendaData = {};
+        let currentWeekStart = '2026-04-20'; // Semana por defecto (lunes)
 
-        // Mapeo inicial de clasificaciones fijas del Mockup de la imagen
+        // Mapeo de clasificaciones visuales por defecto para semanas nuevas sin datos
         const DEFAULT_CLASSIFICATIONS = {
             '9:00-1': 'maquina1', '10:00-1': 'maquina2', '11:00-1': 'maquina1', '12:00-1': 'maquina2', '13:00-1': 'maquina1', '15:00-1': 'maquina2', '16:00-1': 'maquina1',
             '9:00-2': 'maquina2', '10:00-2': 'maquina1', '11:00-2': 'maquina1', '12:00-2': 'maquina1', '13:00-2': 'maquina2', '15:00-2': 'maquina1', '16:00-2': 'maquina2',
             '9:00-3': 'maquina1', '10:00-3': 'confianza', '11:00-3': 'maquina1', '12:00-3': 'maquina2', '13:00-3': 'maquina1', '15:00-3': 'maquina2', '16:00-3': 'maquina1',
             '9:00-4': 'maquina2', '10:00-4': 'maquina1', '11:00-4': 'maquina2', '12:00-4': 'confianza', '13:00-4': 'maquina2', '15:00-4': 'maquina1', '16:00-4': 'maquina2',
-            '9:00-5': 'blocked',   '10:00-5': 'confianza', '11:00-5': 'confianza', '12:00-5': 'confianza', '13:00-5': 'unassigned','15:00-5': 'maquina2', '16:00-5': 'maquina1'
+            '9:00-5': 'blocked',  '10:00-5': 'confianza', '11:00-5': 'confianza', '12:00-5': 'confianza', '13:00-5': 'unassigned', '15:00-5': 'maquina2', '16:00-5': 'maquina1'
         };
 
-        // Pacientes pre-cargados para coincidir con un mockup rico e interactivo
+        // Personas pre-cargadas (usadas solo si la semana no tiene datos en el backend)
         const PRELOADED_PEOPLE = {
-            '9:00-1': { nombre: 'Juan Carlos Pérez', ibm: '640286', depto: '401', clasificacion: 'maquina1' },
-            '10:00-1': { nombre: 'Ana María Torres', ibm: '640301', depto: '405', clasificacion: 'maquina2' },
-            '10:00-3': { nombre: 'Ing. Carlos Mendoza', ibm: '750100', depto: 'Sistemas', clasificacion: 'confianza' },
-            '12:00-4': { nombre: 'Lic. Patricia Ruiz', ibm: '750230', depto: 'Recursos Humanos', clasificacion: 'confianza' },
-            '11:00-2': { nombre: 'Roberto Gómez', ibm: '640552', depto: 'Mantenimiento', clasificacion: 'maquina1' }
+            '9:00-1':  { nombre: 'Juan Carlos Pérez',   ibm: '640286', depto: '401',              clasificacion: 'maquina1' },
+            '10:00-1': { nombre: 'Ana María Torres',     ibm: '640301', depto: '405',              clasificacion: 'maquina2' },
+            '10:00-3': { nombre: 'Ing. Carlos Mendoza',  ibm: '750100', depto: 'Sistemas',         clasificacion: 'confianza' },
+            '12:00-4': { nombre: 'Lic. Patricia Ruiz',   ibm: '750230', depto: 'Recursos Humanos', clasificacion: 'confianza' },
+            '11:00-2': { nombre: 'Roberto Gómez',        ibm: '640552', depto: 'Mantenimiento',    clasificacion: 'maquina1' }
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Inicializar fecha en el selector (2026-04-20)
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Inicializar fecha en el selector
             document.getElementById('fechaSemana').value = currentWeekStart;
-            
-            // Cargar datos guardados de localStorage o precargar iniciales
-            const savedData = localStorage.getItem(`agenda_${currentWeekStart}`);
-            if (savedData) {
-                agendaData = JSON.parse(savedData);
-            } else {
-                // Precarga de clasificaciones y personas por defecto
-                agendaData = {};
+
+            // Cargar datos desde el backend (con fallback a localStorage)
+            agendaData = await cargarProgramacion(currentWeekStart);
+
+            // Si no hay datos en el backend ni en caché, usar precarga por defecto
+            if (Object.keys(agendaData).length === 0) {
                 for (const key in DEFAULT_CLASSIFICATIONS) {
                     agendaData[key] = {
                         clasificacion: DEFAULT_CLASSIFICATIONS[key],
                         empleado: PRELOADED_PEOPLE[key] || null
                     };
                 }
-                saveToStorage();
             }
 
             renderAgendaGrid();
         });
 
-        // Guardado local
+        // Guarda el agendaData en caché local (usado como respaldo offline)
         function saveToStorage() {
-            localStorage.setItem(`agenda_${currentWeekStart}`, JSON.stringify(agendaData));
+            try {
+                localStorage.setItem(`agenda_cache_${currentWeekStart}`, JSON.stringify(agendaData));
+            } catch (_) {}
         }
 
         // Genera el grid HTML de la agenda
@@ -400,62 +402,78 @@
         }
 
         // Guardar Asignación en Modal
-        function saveBooking(e) {
+        async function saveBooking(e) {
             e.preventDefault();
-            const day = document.getElementById('modalDay').value;
+            const day  = document.getElementById('modalDay').value;
             const hour = document.getElementById('modalHour').value;
             const name = document.getElementById('employeeName').value.trim();
-            const ibm = document.getElementById('employeeIBM').value.trim();
+            const ibm  = document.getElementById('employeeIBM').value.trim();
             const dept = document.getElementById('employeeDept').value.trim();
             const clasificacion = document.getElementById('employeeClass').value;
 
-            const key = `${hour}-${day}`;
+            const key     = `${hour}-${day}`;
+            const slotPrev = agendaData[key]; // ¿Ya existe? → actualizar
 
-            if (clasificacion === 'blocked') {
-                agendaData[key] = {
-                    clasificacion: 'blocked',
-                    empleado: null
-                };
+            const registro = {
+                id:            slotPrev ? slotPrev.id : undefined,
+                semana:        currentWeekStart,
+                dia:           day,
+                hora:          hour,
+                clasificacion: clasificacion,
+                nombre:        clasificacion !== 'blocked' ? name : '',
+                ibm:           clasificacion !== 'blocked' ? ibm  : '',
+                area:          clasificacion !== 'blocked' ? dept : '',
+                observaciones: slotPrev ? (slotPrev.observaciones || '') : ''
+            };
+
+            // Actualizar memoria local
+            agendaData[key] = {
+                id:            registro.id,
+                clasificacion: clasificacion,
+                empleado:      clasificacion !== 'blocked' ? { nombre: name, ibm, depto: dept } : null,
+                observaciones: registro.observaciones
+            };
+
+            // Persistir en backend
+            let resultado;
+            if (slotPrev && slotPrev.id) {
+                resultado = await actualizarProgramacion(registro);
             } else {
-                agendaData[key] = {
-                    clasificacion: clasificacion,
-                    empleado: {
-                        nombre: name,
-                        ibm: ibm,
-                        depto: dept
-                    }
-                };
+                resultado = await guardarProgramacion(registro);
             }
 
-            saveToStorage();
+            // Guardar id retornado
+            if (resultado && resultado.id) {
+                agendaData[key].id = resultado.id;
+            }
+
+            saveToStorage(); // Actualizar caché local
             closeModal();
             renderAgendaGrid();
-            showAlert('Horario agendado exitosamente.', 'success');
         }
 
         // Eliminar Asignación o Desbloquear horario
-        function deleteBooking() {
-            const day = document.getElementById('modalDay').value;
+        async function deleteBooking() {
+            const day  = document.getElementById('modalDay').value;
             const hour = document.getElementById('modalHour').value;
-            const key = `${hour}-${day}`;
+            const key  = `${hour}-${day}`;
             const slot = agendaData[key] || {};
 
             const esBloqueo = slot.clasificacion === 'blocked';
             const mensaje = esBloqueo
                 ? '¿Deseas desbloquear este horario y dejarlo disponible?'
                 : '¿Seguro que deseas eliminar la asignación de este horario?';
-            const exito  = esBloqueo ? 'Horario desbloqueado correctamente.' : 'Asignación eliminada con éxito.';
 
             if (confirm(mensaje)) {
-                agendaData[key] = {
-                    clasificacion: 'unassigned',
-                    empleado: null
-                };
+                // Eliminar en backend
+                await eliminarProgramacion(currentWeekStart, hour, day);
 
-                saveToStorage();
+                // Actualizar memoria local
+                agendaData[key] = { clasificacion: 'unassigned', empleado: null };
+
+                saveToStorage(); // Actualizar caché local
                 closeModal();
                 renderAgendaGrid();
-                showAlert(exito, 'success');
             }
         }
 
@@ -480,7 +498,7 @@
         }
 
         // Cambiar Semana Dinámicamente
-        function cambiarSemana() {
+        async function cambiarSemana() {
             const dateVal = document.getElementById('fechaSemana').value;
             if (!dateVal) return;
 
@@ -513,13 +531,11 @@
                 }
             }
 
-            // Cargar datos de la nueva semana
-            const savedData = localStorage.getItem(`agenda_${currentWeekStart}`);
-            if (savedData) {
-                agendaData = JSON.parse(savedData);
-            } else {
-                agendaData = {};
-                // Rellenar con clasificaciones del mockup por defecto
+            // Cargar datos de la nueva semana desde el backend
+            agendaData = await cargarProgramacion(currentWeekStart);
+
+            // Si no hay datos (semana nueva), aplicar clasificaciones por defecto
+            if (Object.keys(agendaData).length === 0) {
                 for (const key in DEFAULT_CLASSIFICATIONS) {
                     agendaData[key] = {
                         clasificacion: DEFAULT_CLASSIFICATIONS[key],
@@ -543,10 +559,13 @@
             window.print();
         }
 
-        // Exportación de PDF a IndexedDB e Historial
+        // Exportación de PDF: sincroniza backend primero, luego genera PDF
         async function generarPDFAgenda() {
             const rangeText = document.getElementById('weekRangeLabel').innerText;
-            
+
+            // Sincronizar todos los datos actuales con el backend antes de generar PDF
+            await sincronizarTodo(currentWeekStart, agendaData);
+
             const pacienteData = {
                 nombre: 'Rol de Programación de Exámenes',
                 edad: 'N/A',
@@ -564,3 +583,4 @@
 </body>
 
 </html>
+
