@@ -5,15 +5,12 @@
  * Reemplaza el uso de localStorage para persistencia de citas.
  *
  * Funciones exportadas:
- * cargarProgramacion(semana)
- * guardarProgramacion(registro)
- * actualizarProgramacion(registro)
- * eliminarProgramacion(semana, hora, dia)
- * sincronizarTodo(semana, agendaData)
+ *   cargarProgramacion(semana)
+ *   guardarProgramacion(registro)
+ *   actualizarProgramacion(registro)
+ *   eliminarProgramacion(semana, hora, dia)
+ *   sincronizarTodo(semana, agendaData)
  */
-
-// ─── CONFIGURACIÓN DE LA API (Enlace de tu Web App de Google) ─────────────────
-const API_URL = 'https://script.google.com/macros/s/AKfycbyax_wujgoNd-fBNmCouQJyhTgHoKLAk7hm17RG6dRWnq2oQxCm64Nnt1or2TIHcjik/exec';
 
 // ─── Utilidades de notificación ───────────────────────────────────────────────
 
@@ -113,6 +110,7 @@ function generarId() {
  */
 async function cargarProgramacion(semana) {
     if (!apiConfigurada()) {
+        // Sin API configurada: usar caché local o devolver vacío
         const cache = leerCache(semana);
         if (cache) return cache;
         return {};
@@ -130,6 +128,7 @@ async function cargarProgramacion(semana) {
         const json = await resp.json();
         if (!json.ok) throw new Error(json.error || 'Respuesta inválida del servidor');
 
+        // Convertir array de registros a formato { "hora-dia": { clasificacion, empleado } }
         const agendaData = {};
         (json.registros || []).forEach(reg => {
             const key = `${reg.hora}-${reg.dia}`;
@@ -145,6 +144,7 @@ async function cargarProgramacion(semana) {
             };
         });
 
+        // Actualizar caché local
         guardarCache(semana, agendaData);
         return agendaData;
 
@@ -152,6 +152,7 @@ async function cargarProgramacion(semana) {
         console.error('[agenda-api] cargarProgramacion error:', err);
         mostrarToast('⚠️ No se pudo conectar al servidor. Usando datos locales.', 'warning');
 
+        // Fallback a caché local
         const cache = leerCache(semana);
         return cache || {};
     }
@@ -238,7 +239,7 @@ async function actualizarProgramacion(registro) {
         };
 
         const resp = await fetch(API_URL, {
-            method: 'POST', // Apps Script solo acepta GET/POST
+            method: 'POST',           // Apps Script solo acepta GET/POST — usamos POST con accion=actualizar
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
@@ -357,6 +358,7 @@ async function sincronizarTodo(semana, agendaData) {
         const json = await resp.json();
         if (!json.ok) throw new Error(json.error || 'Error en sincronización');
 
+        // Actualizar caché con datos actuales
         guardarCache(semana, agendaData);
         mostrarToast('Información almacenada correctamente.', 'success');
 
