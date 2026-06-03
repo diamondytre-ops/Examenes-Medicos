@@ -12,4 +12,4 @@
  * 4. Copia la URL del despliegue y pégala abajo.
  */
 
-const API_URL = "Uhttps://script.google.com/macros/s/AKfycbzx5h0bfhx0M-mPyRlLtMM5uAn-Exh94H0SrGN67Vcdci7n4Jft1etGLAWkmj3T_BGi/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwiQyPn1cUzNZQhSorKUBN1-v-_nKrVbFKrvzGBH45gPe02-ycMAoH58VWn4AOlTk18/exec";
