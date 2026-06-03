@@ -29,6 +29,7 @@
         .cell-703 { background-color: #e0e7ff !important; color: #4338ca !important; border-left: 5px solid #6366f1 !important; }
         .cell-704 { background-color: #fdf4ff !important; color: #a21caf !important; border-left: 5px solid #d946ef !important; }
         .cell-801 { background-color: #f1f5f9 !important; color: #334155 !important; border-left: 5px solid #64748b !important; }
+        .cell-externo { background-color: #f3f4f6 !important; color: #374151 !important; border-left: 5px solid #6b7280 !important; }
 
         /* Contenedor scrollable para simbología */
         .symbology-list {
@@ -250,6 +251,10 @@
                                 <span>801 - GERENCIA ADMINISTRATIVA</span>
                             </li>
                             <li class="symbology-item">
+                                <div class="symbology-color-badge cell-externo"></div>
+                                <span>EXT - PERSONAL EXTERNO</span>
+                            </li>
+                            <li class="symbology-item">
                                 <div class="symbology-color-badge" style="background-color: var(--color-bloqueado);"></div>
                                 <span>HORARIO BLOQUEADO</span>
                             </li>
@@ -300,6 +305,7 @@
                         <option value="703">703 - Almacén de refacciones</option>
                         <option value="704">704 - Materias primas</option>
                         <option value="801">801 - Gerencia administrativa</option>
+                        <option value="externo">EXT - Personal Externo</option>
                         <option value="blocked">🚫 Bloquear Horario (No Laborable)</option>
                     </select>
                 </div>
@@ -336,6 +342,7 @@
                             <option value="703">703 - Almacén de refacciones</option>
                             <option value="704">704 - Materias primas</option>
                             <option value="801">801 - Gerencia administrativa</option>
+                            <option value="externo">EXT - Personal Externo</option>
                         </select>
                     </div>
                 </div>
@@ -397,7 +404,8 @@
             '702': '702 - Adquisiciones',
             '703': '703 - Almacén de refacciones',
             '704': '704 - Materias primas',
-            '801': '801 - Gerencia administrativa'
+            '801': '801 - Gerencia administrativa',
+            'externo': 'EXT - Personal Externo'
         };
 
         // Pacientes pre-cargados para coincidir con un mockup rico e interactivo
