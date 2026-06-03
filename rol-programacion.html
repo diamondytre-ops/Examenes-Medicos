@@ -11,6 +11,69 @@
     <!-- jsPDF y html2canvas para generación de PDF local -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* Estilos de departamentos (Colores Únicos) */
+        .cell-101 { background-color: #f5f3ff !important; color: #3730a3 !important; border-left: 5px solid #4f46e5 !important; }
+        .cell-312 { background-color: #e0f2fe !important; color: #0369a1 !important; border-left: 5px solid #0284c7 !important; }
+        .cell-313 { background-color: #fef9c3 !important; color: #a16207 !important; border-left: 5px solid #eab308 !important; }
+        .cell-321 { background-color: #d1fae5 !important; color: #047857 !important; border-left: 5px solid #10b981 !important; }
+        .cell-322 { background-color: #fce7f3 !important; color: #be185d !important; border-left: 5px solid #ec4899 !important; }
+        .cell-323 { background-color: #f3e8ff !important; color: #6d28d9 !important; border-left: 5px solid #8b5cf6 !important; }
+        .cell-401 { background-color: #ffedd5 !important; color: #c2410c !important; border-left: 5px solid #f97316 !important; }
+        .cell-413 { background-color: #fee2e2 !important; color: #b91c1c !important; border-left: 5px solid #ef4444 !important; }
+        .cell-424 { background-color: #ecfeff !important; color: #0891b2 !important; border-left: 5px solid #06b6d4 !important; }
+        .cell-501 { background-color: #ccfbf1 !important; color: #0f766e !important; border-left: 5px solid #14b8a6 !important; }
+        .cell-601 { background-color: #f3e8ff !important; color: #7e22ce !important; border-left: 5px solid #a855f7 !important; }
+        .cell-671 { background-color: #f7fee7 !important; color: #4d7c0f !important; border-left: 5px solid #84cc16 !important; }
+        .cell-702 { background-color: #fefce8 !important; color: #a16207 !important; border-left: 5px solid #eab308 !important; }
+        .cell-703 { background-color: #e0e7ff !important; color: #4338ca !important; border-left: 5px solid #6366f1 !important; }
+        .cell-704 { background-color: #fdf4ff !important; color: #a21caf !important; border-left: 5px solid #d946ef !important; }
+        .cell-801 { background-color: #f1f5f9 !important; color: #334155 !important; border-left: 5px solid #64748b !important; }
+
+        /* Contenedor scrollable para simbología */
+        .symbology-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .symbology-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .symbology-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .symbology-list::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 4px;
+        }
+        .symbology-list::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        .symbology-box {
+            width: 100%;
+        }
+
+        .schedule-footer-panel {
+            grid-template-columns: 550px 1fr !important;
+        }
+
+        @media print {
+            .symbology-list {
+                max-height: none !important;
+                overflow-y: visible !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+            .schedule-footer-panel {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -123,16 +186,68 @@
                         <h3 style="color: #1a202c;">SIMBOLOGÍA</h3>
                         <ul class="symbology-list">
                             <li class="symbology-item">
-                                <div class="symbology-color-badge" style="background-color: var(--color-maquina1-light); border-left: 5px solid var(--color-maquina1);"></div>
-                                <span>MÁQUINA 1</span>
+                                <div class="symbology-color-badge cell-101"></div>
+                                <span>101 - GERENCIA DE PLANTA</span>
                             </li>
                             <li class="symbology-item">
-                                <div class="symbology-color-badge" style="background-color: var(--color-maquina2-light); border-left: 5px solid var(--color-maquina2);"></div>
-                                <span>MÁQUINA 2</span>
+                                <div class="symbology-color-badge cell-312"></div>
+                                <span>312 - MÁQUINA 1</span>
                             </li>
                             <li class="symbology-item">
-                                <div class="symbology-color-badge" style="background-color: var(--color-confianza-light); border-left: 5px solid var(--color-confianza);"></div>
-                                <span>PERSONAL DE CONFIANZA</span>
+                                <div class="symbology-color-badge cell-313"></div>
+                                <span>313 - MÁQUINA 2</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-321"></div>
+                                <span>321 - SALA DE ACABADO</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-322"></div>
+                                <span>322 - PAPEL CORTADO</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-323"></div>
+                                <span>323 - PAPEL EXTENDIDO</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-401"></div>
+                                <span>401 - MANTENIMIENTO</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-413"></div>
+                                <span>413 - CALDERAS DE FUERZA</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-424"></div>
+                                <span>424 - EFLUENTES</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-501"></div>
+                                <span>501 - LABORATORIO TÉCNICO</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-601"></div>
+                                <span>601 - RELACIONES INDUSTRIALES</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-671"></div>
+                                <span>671 - DISTRIBUCIÓN Y TRÁFICO</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-702"></div>
+                                <span>702 - ADQUISICIONES</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-703"></div>
+                                <span>703 - ALMACÉN DE REFACCIONES</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-704"></div>
+                                <span>704 - MATERIAS PRIMAS</span>
+                            </li>
+                            <li class="symbology-item">
+                                <div class="symbology-color-badge cell-801"></div>
+                                <span>801 - GERENCIA ADMINISTRATIVA</span>
                             </li>
                             <li class="symbology-item">
                                 <div class="symbology-color-badge" style="background-color: var(--color-bloqueado);"></div>
@@ -167,11 +282,24 @@
                 <input type="hidden" id="modalHour">
 
                 <div class="form-group">
-                    <label for="employeeClass">Clasificación / Grupo</label>
+                    <label for="employeeClass">Clasificación / Departamento</label>
                     <select id="employeeClass" class="form-control" onchange="onClasificacionChange()">
-                        <option value="maquina1">Máquina 1</option>
-                        <option value="maquina2">Máquina 2</option>
-                        <option value="confianza">Personal de Confianza</option>
+                        <option value="101">101 - Gerencia de planta</option>
+                        <option value="312">312 - Máquina 1</option>
+                        <option value="313">313 - Máquina 2</option>
+                        <option value="321">321 - Sala de acabado</option>
+                        <option value="322">322 - Papel cortado</option>
+                        <option value="323">323 - Papel extendido</option>
+                        <option value="401">401 - Mantenimiento</option>
+                        <option value="413">413 - Calderas de fuerza</option>
+                        <option value="424">424 - Efluentes</option>
+                        <option value="501">501 - Laboratorio técnico</option>
+                        <option value="601">601 - Relaciones industriales</option>
+                        <option value="671">671 - Distribución y tráfico</option>
+                        <option value="702">702 - Adquisiciones</option>
+                        <option value="703">703 - Almacén de refacciones</option>
+                        <option value="704">704 - Materias primas</option>
+                        <option value="801">801 - Gerencia administrativa</option>
                         <option value="blocked">🚫 Bloquear Horario (No Laborable)</option>
                     </select>
                 </div>
@@ -190,7 +318,25 @@
 
                     <div class="form-group">
                         <label for="employeeDept">Departamento</label>
-                        <input type="text" id="employeeDept" class="form-control" placeholder="Ej. 401" required>
+                        <select id="employeeDept" class="form-control" onchange="document.getElementById('employeeClass').value = this.value; onClasificacionChange();" required>
+                            <option value="">-- Seleccionar Departamento --</option>
+                            <option value="101">101 - Gerencia de planta</option>
+                            <option value="312">312 - Máquina 1</option>
+                            <option value="313">313 - Máquina 2</option>
+                            <option value="321">321 - Sala de acabado</option>
+                            <option value="322">322 - Papel cortado</option>
+                            <option value="323">323 - Papel extendido</option>
+                            <option value="401">401 - Mantenimiento</option>
+                            <option value="413">413 - Calderas de fuerza</option>
+                            <option value="424">424 - Efluentes</option>
+                            <option value="501">501 - Laboratorio técnico</option>
+                            <option value="601">601 - Relaciones industriales</option>
+                            <option value="671">671 - Distribución y tráfico</option>
+                            <option value="702">702 - Adquisiciones</option>
+                            <option value="703">703 - Almacén de refacciones</option>
+                            <option value="704">704 - Materias primas</option>
+                            <option value="801">801 - Gerencia administrativa</option>
+                        </select>
                     </div>
                 </div>
 
@@ -215,62 +361,80 @@
     <script src="db.js"></script>
     <script src="pdf.js"></script>
     <script src="script.js"></script>
-    <!-- API Backend -->
-    <script src="api-config.js"></script>
-    <script src="agenda-api.js"></script>
 
     <!-- Lógica de Negocio de la Agenda -->
     <script>
         const HOURS = ['9:00', '10:00', '11:00', '12:00', '13:00', '15:00', '16:00'];
         const DAYS = [1, 2, 3, 4, 5]; // Lun, Mar, Mie, Jue, Vie
         
-        // Base de datos en memoria (fuente: backend Google Sheets)
-        let agendaData = {};
-        let currentWeekStart = '2026-04-20'; // Semana por defecto (lunes)
+        // Base de Datos local en memoria respaldada por LocalStorage
+        let agendaData = {}; 
+        let currentWeekStart = '2026-04-20'; // Semana por defecto de lunes
 
-        // Mapeo de clasificaciones visuales por defecto para semanas nuevas sin datos
+        // Mapeo inicial de clasificaciones fijas del Mockup de la imagen
         const DEFAULT_CLASSIFICATIONS = {
-            '9:00-1': 'maquina1', '10:00-1': 'maquina2', '11:00-1': 'maquina1', '12:00-1': 'maquina2', '13:00-1': 'maquina1', '15:00-1': 'maquina2', '16:00-1': 'maquina1',
-            '9:00-2': 'maquina2', '10:00-2': 'maquina1', '11:00-2': 'maquina1', '12:00-2': 'maquina1', '13:00-2': 'maquina2', '15:00-2': 'maquina1', '16:00-2': 'maquina2',
-            '9:00-3': 'maquina1', '10:00-3': 'confianza', '11:00-3': 'maquina1', '12:00-3': 'maquina2', '13:00-3': 'maquina1', '15:00-3': 'maquina2', '16:00-3': 'maquina1',
-            '9:00-4': 'maquina2', '10:00-4': 'maquina1', '11:00-4': 'maquina2', '12:00-4': 'confianza', '13:00-4': 'maquina2', '15:00-4': 'maquina1', '16:00-4': 'maquina2',
-            '9:00-5': 'blocked',  '10:00-5': 'confianza', '11:00-5': 'confianza', '12:00-5': 'confianza', '13:00-5': 'unassigned', '15:00-5': 'maquina2', '16:00-5': 'maquina1'
+            '9:00-1': '312', '10:00-1': '313', '11:00-1': '312', '12:00-1': '313', '13:00-1': '312', '15:00-1': '313', '16:00-1': '312',
+            '9:00-2': '313', '10:00-2': '312', '11:00-2': '312', '12:00-2': '312', '13:00-2': '313', '15:00-2': '312', '16:00-2': '313',
+            '9:00-3': '312', '10:00-3': '801', '11:00-3': '312', '12:00-3': '313', '13:00-3': '312', '15:00-3': '313', '16:00-3': '312',
+            '9:00-4': '313', '10:00-4': '312', '11:00-4': '313', '12:00-4': '801', '13:00-4': '313', '15:00-4': '312', '16:00-4': '313',
+            '9:00-5': 'blocked',   '10:00-5': '801', '11:00-5': '801', '12:00-5': '801', '13:00-5': 'unassigned','15:00-5': '313', '16:00-5': '312'
         };
 
-        // Personas pre-cargadas (usadas solo si la semana no tiene datos en el backend)
+        // Mapeo de nombres de departamentos para display
+        const DEPARTMENTS = {
+            '101': '101 - Gerencia de planta',
+            '312': '312 - Máquina 1',
+            '313': '313 - Máquina 2',
+            '321': '321 - Sala de acabado',
+            '322': '322 - Papel cortado',
+            '323': '323 - Papel extendido',
+            '401': '401 - Mantenimiento',
+            '413': '413 - Calderas de fuerza',
+            '424': '424 - Efluentes',
+            '501': '501 - Laboratorio técnico',
+            '601': '601 - Relaciones industriales',
+            '671': '671 - Distribución y tráfico',
+            '702': '702 - Adquisiciones',
+            '703': '703 - Almacén de refacciones',
+            '704': '704 - Materias primas',
+            '801': '801 - Gerencia administrativa'
+        };
+
+        // Pacientes pre-cargados para coincidir con un mockup rico e interactivo
         const PRELOADED_PEOPLE = {
-            '9:00-1':  { nombre: 'Juan Carlos Pérez',   ibm: '640286', depto: '401',              clasificacion: 'maquina1' },
-            '10:00-1': { nombre: 'Ana María Torres',     ibm: '640301', depto: '405',              clasificacion: 'maquina2' },
-            '10:00-3': { nombre: 'Ing. Carlos Mendoza',  ibm: '750100', depto: 'Sistemas',         clasificacion: 'confianza' },
-            '12:00-4': { nombre: 'Lic. Patricia Ruiz',   ibm: '750230', depto: 'Recursos Humanos', clasificacion: 'confianza' },
-            '11:00-2': { nombre: 'Roberto Gómez',        ibm: '640552', depto: 'Mantenimiento',    clasificacion: 'maquina1' }
+            '9:00-1': { nombre: 'Juan Carlos Pérez', ibm: '640286', depto: '401', clasificacion: '312' },
+            '10:00-1': { nombre: 'Ana María Torres', ibm: '640301', depto: '313', clasificacion: '313' },
+            '10:00-3': { nombre: 'Ing. Carlos Mendoza', ibm: '750100', depto: '801', clasificacion: '801' },
+            '12:00-4': { nombre: 'Lic. Patricia Ruiz', ibm: '750230', depto: '601', clasificacion: '601' },
+            '11:00-2': { nombre: 'Roberto Gómez', ibm: '640552', depto: '401', clasificacion: '312' }
         };
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Inicializar fecha en el selector
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar fecha en el selector (2026-04-20)
             document.getElementById('fechaSemana').value = currentWeekStart;
-
-            // Cargar datos desde el backend (con fallback a localStorage)
-            agendaData = await cargarProgramacion(currentWeekStart);
-
-            // Si no hay datos en el backend ni en caché, usar precarga por defecto
-            if (Object.keys(agendaData).length === 0) {
+            
+            // Cargar datos guardados de localStorage o precargar iniciales
+            const savedData = localStorage.getItem(`agenda_${currentWeekStart}`);
+            if (savedData) {
+                agendaData = JSON.parse(savedData);
+            } else {
+                // Precarga de clasificaciones y personas por defecto
+                agendaData = {};
                 for (const key in DEFAULT_CLASSIFICATIONS) {
                     agendaData[key] = {
                         clasificacion: DEFAULT_CLASSIFICATIONS[key],
                         empleado: PRELOADED_PEOPLE[key] || null
                     };
                 }
+                saveToStorage();
             }
 
             renderAgendaGrid();
         });
 
-        // Guarda el agendaData en caché local (usado como respaldo offline)
+        // Guardado local
         function saveToStorage() {
-            try {
-                localStorage.setItem(`agenda_cache_${currentWeekStart}`, JSON.stringify(agendaData));
-            } catch (_) {}
+            localStorage.setItem(`agenda_${currentWeekStart}`, JSON.stringify(agendaData));
         }
 
         // Genera el grid HTML de la agenda
@@ -297,10 +461,25 @@
                     const key = `${hour}-${day}`;
                     const slot = agendaData[key] || { clasificacion: 'unassigned', empleado: null };
 
-                    // Aplicar clases de estilo
-                    td.className = `schedule-cell cell-${slot.clasificacion}`;
-                    
+                    // Determinar clasificación/departamento
+                    let deptoClass = 'unassigned';
                     if (slot.clasificacion === 'blocked') {
+                        deptoClass = 'blocked';
+                    } else if (slot.empleado && slot.empleado.depto) {
+                        deptoClass = slot.empleado.depto;
+                    } else {
+                        deptoClass = slot.clasificacion || 'unassigned';
+                    }
+
+                    // Mapeo retrocompatible
+                    if (deptoClass === 'maquina1') deptoClass = '312';
+                    if (deptoClass === 'maquina2') deptoClass = '313';
+                    if (deptoClass === 'confianza') deptoClass = '801';
+
+                    // Aplicar clases de estilo
+                    td.className = `schedule-cell cell-${deptoClass}`;
+                    
+                    if (deptoClass === 'blocked') {
                         // Bloqueado: SÍ es clicleable para poder desbloquear
                         td.onclick = () => openBookingModal(day, hour);
                         td.innerHTML = `<div class="cell-content-wrapper blocked-label"><i class="fas fa-ban"></i><span>NO LABORABLE</span><span class="unlock-hint"><i class="fas fa-lock-open"></i> Clic para desbloquear</span></div>`;
@@ -308,11 +487,12 @@
                         td.onclick = () => openBookingModal(day, hour);
 
                         if (slot.empleado) {
+                            const deptLabel = DEPARTMENTS[slot.empleado.depto] || slot.empleado.depto || '';
                             td.innerHTML = `
                                 <div class="cell-content-wrapper">
                                     <div class="cell-patient-name">${slot.empleado.nombre}</div>
                                     <div class="cell-patient-id">IBM: ${slot.empleado.ibm}</div>
-                                    <div class="cell-patient-dept">${slot.empleado.depto}</div>
+                                    <div class="cell-patient-dept">${deptLabel}</div>
                                 </div>
                             `;
                         } else {
@@ -335,7 +515,7 @@
             const notice = document.getElementById('blockedNotice');
             const nameInput = document.getElementById('employeeName');
             const ibmInput  = document.getElementById('employeeIBM');
-            const deptInput = document.getElementById('employeeDept');
+            const deptSelect = document.getElementById('employeeDept');
             const btnGuardar = document.getElementById('btnGuardar');
 
             if (val === 'blocked') {
@@ -343,7 +523,7 @@
                 notice.style.display = 'block';
                 nameInput.removeAttribute('required');
                 ibmInput.removeAttribute('required');
-                deptInput.removeAttribute('required');
+                deptSelect.removeAttribute('required');
                 btnGuardar.innerHTML = '<i class="fas fa-ban"></i> Confirmar Bloqueo';
                 btnGuardar.style.background = '#e53e3e';
             } else {
@@ -351,7 +531,13 @@
                 notice.style.display = 'none';
                 nameInput.setAttribute('required', 'required');
                 ibmInput.setAttribute('required', 'required');
-                deptInput.setAttribute('required', 'required');
+                deptSelect.setAttribute('required', 'required');
+                
+                // Sincronizar select de departamento con select de clasificación si no coincide
+                if (val && val !== 'unassigned' && deptSelect.value !== val) {
+                    deptSelect.value = val;
+                }
+                
                 btnGuardar.innerHTML = '<i class="fas fa-save"></i> Guardar Asignación';
                 btnGuardar.style.background = '';
             }
@@ -381,13 +567,30 @@
                 document.getElementById('modalTitle').innerHTML = `<i class="fas fa-user-clock"></i> Editar Horario — ${dayLabel} ${hour}`;
                 document.getElementById('employeeName').value = slot.empleado.nombre;
                 document.getElementById('employeeIBM').value = slot.empleado.ibm;
-                document.getElementById('employeeDept').value = slot.empleado.depto;
-                document.getElementById('employeeClass').value = slot.clasificacion;
+                
+                let deptVal = slot.empleado.depto;
+                if (deptVal === 'maquina1') deptVal = '312';
+                if (deptVal === 'maquina2') deptVal = '313';
+                if (deptVal === 'confianza') deptVal = '801';
+                document.getElementById('employeeDept').value = deptVal || '';
+                
+                let classVal = slot.clasificacion;
+                if (classVal === 'maquina1') classVal = '312';
+                if (classVal === 'maquina2') classVal = '313';
+                if (classVal === 'confianza') classVal = '801';
+                document.getElementById('employeeClass').value = classVal;
+                
                 btnDelete.style.display = 'block';
                 btnDelete.innerHTML = '<i class="fas fa-trash-alt"></i> Eliminar Asignación';
             } else {
                 document.getElementById('modalTitle').innerHTML = `<i class="fas fa-user-clock"></i> Asignar Horario — ${dayLabel} ${hour}`;
-                document.getElementById('employeeClass').value = slot.clasificacion === 'unassigned' ? 'maquina1' : slot.clasificacion;
+                
+                let classVal = slot.clasificacion;
+                if (classVal === 'maquina1') classVal = '312';
+                if (classVal === 'maquina2') classVal = '313';
+                if (classVal === 'confianza') classVal = '801';
+                
+                document.getElementById('employeeClass').value = classVal === 'unassigned' ? '312' : classVal;
                 btnDelete.style.display = 'none';
             }
 
@@ -402,78 +605,62 @@
         }
 
         // Guardar Asignación en Modal
-        async function saveBooking(e) {
+        function saveBooking(e) {
             e.preventDefault();
-            const day  = document.getElementById('modalDay').value;
+            const day = document.getElementById('modalDay').value;
             const hour = document.getElementById('modalHour').value;
             const name = document.getElementById('employeeName').value.trim();
-            const ibm  = document.getElementById('employeeIBM').value.trim();
+            const ibm = document.getElementById('employeeIBM').value.trim();
             const dept = document.getElementById('employeeDept').value.trim();
             const clasificacion = document.getElementById('employeeClass').value;
 
-            const key     = `${hour}-${day}`;
-            const slotPrev = agendaData[key]; // ¿Ya existe? → actualizar
+            const key = `${hour}-${day}`;
 
-            const registro = {
-                id:            slotPrev ? slotPrev.id : undefined,
-                semana:        currentWeekStart,
-                dia:           day,
-                hora:          hour,
-                clasificacion: clasificacion,
-                nombre:        clasificacion !== 'blocked' ? name : '',
-                ibm:           clasificacion !== 'blocked' ? ibm  : '',
-                area:          clasificacion !== 'blocked' ? dept : '',
-                observaciones: slotPrev ? (slotPrev.observaciones || '') : ''
-            };
-
-            // Actualizar memoria local
-            agendaData[key] = {
-                id:            registro.id,
-                clasificacion: clasificacion,
-                empleado:      clasificacion !== 'blocked' ? { nombre: name, ibm, depto: dept } : null,
-                observaciones: registro.observaciones
-            };
-
-            // Persistir en backend
-            let resultado;
-            if (slotPrev && slotPrev.id) {
-                resultado = await actualizarProgramacion(registro);
+            if (clasificacion === 'blocked') {
+                agendaData[key] = {
+                    clasificacion: 'blocked',
+                    empleado: null
+                };
             } else {
-                resultado = await guardarProgramacion(registro);
+                agendaData[key] = {
+                    clasificacion: clasificacion,
+                    empleado: {
+                        nombre: name,
+                        ibm: ibm,
+                        depto: dept
+                    }
+                };
             }
 
-            // Guardar id retornado
-            if (resultado && resultado.id) {
-                agendaData[key].id = resultado.id;
-            }
-
-            saveToStorage(); // Actualizar caché local
+            saveToStorage();
             closeModal();
             renderAgendaGrid();
+            showAlert('Horario agendado exitosamente.', 'success');
         }
 
         // Eliminar Asignación o Desbloquear horario
-        async function deleteBooking() {
-            const day  = document.getElementById('modalDay').value;
+        function deleteBooking() {
+            const day = document.getElementById('modalDay').value;
             const hour = document.getElementById('modalHour').value;
-            const key  = `${hour}-${day}`;
+            const key = `${hour}-${day}`;
             const slot = agendaData[key] || {};
 
             const esBloqueo = slot.clasificacion === 'blocked';
             const mensaje = esBloqueo
                 ? '¿Deseas desbloquear este horario y dejarlo disponible?'
                 : '¿Seguro que deseas eliminar la asignación de este horario?';
+            const exito  = esBloqueo ? 'Horario desbloqueado correctamente.' : 'Asignación eliminada con éxito.';
 
             if (confirm(mensaje)) {
-                // Eliminar en backend
-                await eliminarProgramacion(currentWeekStart, hour, day);
+                agendaData[key] = {
+                    clasificacion: 'unassigned',
+                    empleado: null
+                };
 
-                // Actualizar memoria local
-                agendaData[key] = { clasificacion: 'unassigned', empleado: null };
-
-                saveToStorage(); // Actualizar caché local
+                saveToStorage();
                 closeModal();
                 renderAgendaGrid();
+                showAlert(exito, 'success');
             }
         }
 
@@ -498,7 +685,7 @@
         }
 
         // Cambiar Semana Dinámicamente
-        async function cambiarSemana() {
+        function cambiarSemana() {
             const dateVal = document.getElementById('fechaSemana').value;
             if (!dateVal) return;
 
@@ -531,11 +718,13 @@
                 }
             }
 
-            // Cargar datos de la nueva semana desde el backend
-            agendaData = await cargarProgramacion(currentWeekStart);
-
-            // Si no hay datos (semana nueva), aplicar clasificaciones por defecto
-            if (Object.keys(agendaData).length === 0) {
+            // Cargar datos de la nueva semana
+            const savedData = localStorage.getItem(`agenda_${currentWeekStart}`);
+            if (savedData) {
+                agendaData = JSON.parse(savedData);
+            } else {
+                agendaData = {};
+                // Rellenar con clasificaciones del mockup por defecto
                 for (const key in DEFAULT_CLASSIFICATIONS) {
                     agendaData[key] = {
                         clasificacion: DEFAULT_CLASSIFICATIONS[key],
@@ -559,13 +748,10 @@
             window.print();
         }
 
-        // Exportación de PDF: sincroniza backend primero, luego genera PDF
+        // Exportación de PDF a IndexedDB e Historial
         async function generarPDFAgenda() {
             const rangeText = document.getElementById('weekRangeLabel').innerText;
-
-            // Sincronizar todos los datos actuales con el backend antes de generar PDF
-            await sincronizarTodo(currentWeekStart, agendaData);
-
+            
             const pacienteData = {
                 nombre: 'Rol de Programación de Exámenes',
                 edad: 'N/A',
